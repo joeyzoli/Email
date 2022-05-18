@@ -191,8 +191,8 @@ public class Email
             }
 			for(int szamlalo = 0; szamlalo < emailcimek.size(); szamlalo++)
 			{	
-				//final String username = "kovacs.zoltan@veas.videoton.hu";						//joeyayeti@gmail.com					//kovacs.zoltan@veas.videoton.hu
-		        //final String password = "kovacs";							//Pol!P235			//hntkrkvdwlwdtihx							//Kovacs12Zoltan8000
+				//final String username = "kovacs.zoltan@veas.videoton.hu";										//kovacs.zoltan@veas.videoton.hu
+		        //final String password = "kovacs";																//Kovacs12Zoltan8000
 		        
 		        //System.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
 		        Properties props = new Properties(); //new Properties();     System.getProperties();
