@@ -176,7 +176,7 @@ public class Email
 		fc4 = new JFileChooser();
 	}
 	
-	class Kuldes implements ActionListener
+	private class Kuldes implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e) 
 		{
@@ -191,8 +191,8 @@ public class Email
             }
 			for(int szamlalo = 0; szamlalo < emailcimek.size(); szamlalo++)
 			{	
-				//final String username = "kovacs.zoltan@veas.videoton.hu";										//kovacs.zoltan@veas.videoton.hu
-		        //final String password = "kovacs";																//Kovacs12Zoltan8000
+				//final String username = "kovacs.zoltan@veas.videoton.hu";										
+		        //final String password = "*******";																
 		        
 		        //System.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
 		        Properties props = new Properties(); //new Properties();     System.getProperties();
@@ -281,7 +281,7 @@ public class Email
 		}		
 	}
 	
-	class Megnyitas implements ActionListener															//megnyitó osztály
+	private class Megnyitas implements ActionListener															//megnyitó osztály
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
@@ -321,7 +321,7 @@ public class Email
 		 }		
 	}
 	
-	class Csatolmany implements ActionListener															//megniytó osztály
+	private class Csatolmany implements ActionListener															//megniytó osztály
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
@@ -340,7 +340,7 @@ public class Email
 		 }		
 	}
 	
-	class Elonezet implements ActionListener														//előnézet oszály
+	private class Elonezet implements ActionListener														//előnézet oszály
 	{
 		public void actionPerformed(ActionEvent e) 
 		{
@@ -386,7 +386,7 @@ public class Email
 		ablak.setVisible(true);
 	}
 	
-	class FixCsatolmany1 implements ActionListener															//megniytó osztály
+	private class FixCsatolmany1 implements ActionListener															//megniytó osztály
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
@@ -403,7 +403,7 @@ public class Email
 		 }		
 	}
 	
-	class FixCsatolmany2 implements ActionListener															//megniytó osztály
+	private class FixCsatolmany2 implements ActionListener															//megniytó osztály
 	{
 		public void actionPerformed(ActionEvent e)
 		 {
