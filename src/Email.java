@@ -37,7 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
-public class Email 
+public class Email
 {
 
 	private JFrame frame;
@@ -180,16 +180,10 @@ public class Email
 	{
 		public void actionPerformed(ActionEvent e) 
 		{
-			try 
-	        {
-			mappa = csatoltfile.listFiles();												//csatolt mappa tartalmának kilistázása
-	        }
-			 catch (NullPointerException e1) 
-            {
-                String hibauzenet = e1.toString();  										//hibaüzenet Stringé alakítása
-                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);			//hibaüzenet kiiratása üzenetablakba
-            }
-			for(int szamlalo = 0; szamlalo < emailcimek.size(); szamlalo++)
+	
+			int szamlalo2 = 0;
+			
+			for(int szamlalo = 1; szamlalo < emailcimek.size(); szamlalo++)
 			{	
 				//final String username = "kovacs.zoltan@veas.videoton.hu";										
 		        //final String password = "*******";																
@@ -233,7 +227,7 @@ public class Email
 	
 		            if(fix2 != null)																//ha csatoltak 2. fix csatolmányt is akkor fut le
 		            {
-		                attachmentPart.attachFile(mappa[szamlalo]);									//csatolmány csatolása
+		                attachmentPart.attachFile(mappa[szamlalo2]);									//csatolmány csatolása
 		                attachmentPart2.attachFile(fix1);											//fix csatolmány csatolása
 		                attachmentPart3.attachFile(fix2);											//fix csatolmány csatolása
 		                textPart.setText(level.getText());											//levél tartalmának csatolása
@@ -242,18 +236,33 @@ public class Email
 		                multipart.addBodyPart(attachmentPart2);
 		                multipart.addBodyPart(attachmentPart3);
 		            }
-		            else																			//amennyiben csak 1 fix van csatolva
+		            else if(fix1 != null)																			//amennyiben csak 1 fix van csatolva
 		            {
-		            	attachmentPart.attachFile(mappa[szamlalo]);
+		            	attachmentPart.attachFile(mappa[szamlalo2]);
 		                attachmentPart2.attachFile(fix1);
 		                textPart.setText(level.getText());
 		                multipart.addBodyPart(textPart);
 		                multipart.addBodyPart(attachmentPart);
 		                multipart.addBodyPart(attachmentPart2);
 		            }
+		            else
+		            {
+		            	attachmentPart.attachFile(mappa[szamlalo2]);
+		                textPart.setText(level.getText());
+		                multipart.addBodyPart(textPart);
+		                multipart.addBodyPart(attachmentPart);
+		            }
 		        
 		           
-	
+		            if(szamlalo < emailcimek.size())
+		            {
+		            	szamlalo++;
+		            	szamlalo2++;
+		            }
+		            else
+		            {
+		            	szamlalo2++;
+		            }
 		            message.setContent(multipart);													//message üzenethez mindent hozzáad
 		            
 		            Transport.send(message);														//levél küldése
@@ -264,17 +273,22 @@ public class Email
 				catch (IOException e1) 																//Exception kivételek esetén történik
 	            {
 	                String hibauzenet = e1.toString();  											//hibaüzenet stringé alakítása
-	                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);				//hibaüzenet kiiratása egy kis ablakba
+	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);				//hibaüzenet kiiratása egy kis ablakba
 	            }
 		        catch (MessagingException e1) 
 		        {
 		        	String hibauzenet = e1.toString();  
-	                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);
 		        }
 		        catch (NullPointerException e1) 
 	            {
 	                String hibauzenet = e1.toString();  
-	                JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);
+	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);
+	            }
+		        catch (ArrayIndexOutOfBoundsException e1) 
+	            {
+	                String hibauzenet = e1.toString();  
+	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);
 	            }
 			}			
 			JOptionPane.showMessageDialog(null, "Küldés kész", "Tájékoztató üzenet", 1);			
@@ -311,13 +325,23 @@ public class Email
 			            		emailcimek.add(cell.getStringCellValue());
 			            	}  			            	 
 		            	}  
-					} 
+					}
 				}
 			}
 			catch(IOException e1)
 			{
 				JOptionPane.showMessageDialog(null, "Olvasási hiba történt", "Hibaüzenet", 2);
+			}/*
+			for(int szamlalo = 3; szamlalo < emailcimek.size(); szamlalo++)
+			{
+				System.out.println(emailcimek.get(szamlalo));
+				szamlalo ++;
 			}
+			for(int szamlalo = 2; szamlalo < emailcimek.size(); szamlalo++)
+			{
+				System.out.println(emailcimek.get(szamlalo));
+				szamlalo ++;
+			}*/
 		 }		
 	}
 	
@@ -337,6 +361,10 @@ public class Email
 					mappa = csatoltfile.listFiles();												//kilistázza és egy tömbnek adja a mappa elemeit
 				}				
 			}
+			for(int szamlalo = 0; szamlalo < mappa.length; szamlalo++)
+			{
+				System.out.println(mappa[szamlalo]);
+			} 
 		 }		
 	}
 	
@@ -367,21 +395,46 @@ public class Email
 		JScrollPane scrollPane2 = new JScrollPane(lista);											//scrollozható ablak létrehozása a Jlistből
 		scrollPane2.setBounds(100, 30, 800, 300);
 		ablak.getContentPane().add(scrollPane2);
+		int szamlalo;
+		int szamlalo2 = 0;
 		
-		if(fix2 != null)
-        {
-			for(int szamlalo = 0; szamlalo < emailcimek.size(); szamlalo++)
+		try
+		{	
+			if(fix2 != null)
+	        {
+				for(szamlalo = 0; szamlalo < emailcimek.size(); szamlalo++)
+				{
+					model.addElement(emailcimek.get(szamlalo) + "  --  " + mappa[szamlalo2].getName() + "  --  " + fix1.getName() + "  --  " + fix2.getName());
+					szamlalo2++;
+				} 
+	        }
+			else if(fix1 != null)
 			{
-				model.addElement(emailcimek.get(szamlalo) + "  --  " + mappa[szamlalo].getName() + "  --  " + fix1.getName() + "  --  " + fix2.getName());
-			} 
-        }
-		else
-		{
-			for(int szamlalo = 0; szamlalo < emailcimek.size(); szamlalo++)
+				for(szamlalo = 0; szamlalo < emailcimek.size(); szamlalo++)
+				{
+					model.addElement(emailcimek.get(szamlalo) + "  --  " + mappa[szamlalo2].getName() + "  --  " + fix1.getName());
+					szamlalo2++;
+				}
+			}
+			else
 			{
-				model.addElement(emailcimek.get(szamlalo) + "  --  " + mappa[szamlalo].getName() + "  --  " + fix1.getName());
+				for(szamlalo = 1; szamlalo < emailcimek.size(); szamlalo++)
+				{
+					model.addElement(emailcimek.get(szamlalo) + "  --  " + mappa[szamlalo2].getName());
+					if(szamlalo < emailcimek.size())
+		            {
+		            	szamlalo++;
+		            }
+					szamlalo2++;
+				}
 			}
 		}
+		catch(ArrayIndexOutOfBoundsException e1) 																//Exception kivételek esetén történik
+        {
+            String hibauzenet = e1.toString();  											//hibaüzenet stringé alakítása
+            JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);				//hibaüzenet kiiratása egy kis ablakba
+            ablak.setVisible(true);
+        }
 		
 		ablak.setVisible(true);
 	}
