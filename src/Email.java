@@ -141,6 +141,7 @@ public class Email
 		frame.getContentPane().add(csatolmany);
 		
 		felado = new JTextField();
+		felado.setText("jenei.erika@veas.videoton.hu");
 		felado.setBounds(106, 74, 256, 20);
 		frame.getContentPane().add(felado);
 		felado.setColumns(10);
@@ -215,6 +216,8 @@ public class Email
 		            message.setFrom(new InternetAddress(felado.getText()));							//feladó beállítása
 		            message.setRecipients(Message.RecipientType.TO,
 		                InternetAddress.parse(emailcimek.get(szamlalo)));							//címzett beállítása
+		            /*message.setRecipients(Message.RecipientType.CC,
+			                InternetAddress.parse("jenei.erika@veas.videoton.hu"));							//címzett beállítása*/
 		            message.setSubject(targy.getText());											//tárgy beállítása
 		           
 		            Multipart multipart = new MimeMultipart();										//csatoló osztály példányosítása
@@ -303,7 +306,7 @@ public class Email
 			{
 				if (e.getSource() == beolvas) 
 				{
-
+					fc.setCurrentDirectory(new java.io.File("z:\\RoHS,Reach, CFSI\\"));
 					int returnVal = fc.showOpenDialog(frame);											//fájl megniytásának adbalak megnyit
 	
 					if (returnVal == JFileChooser.APPROVE_OPTION) 					
@@ -351,6 +354,7 @@ public class Email
 		 {
 			if (e.getSource() == csatol) 
 			{
+				fc2.setCurrentDirectory(new java.io.File("z:\\RoHS,Reach, CFSI\\"));
 				fc2.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);							//csak könyvtárakat nyit meg
 				fc2.setAcceptAllFileFilterUsed(false);												//kikapcsolja a fájlok láthatóságát
 				int returnVal = fc2.showOpenDialog(frame);											//fájl megniytásának adbalak megnyit	
@@ -402,23 +406,31 @@ public class Email
 		{	
 			if(fix2 != null)
 	        {
-				for(szamlalo = 0; szamlalo < emailcimek.size(); szamlalo++)
+				for(szamlalo = 1; szamlalo2 < mappa.length; szamlalo++)
 				{
 					model.addElement(emailcimek.get(szamlalo) + "  --  " + mappa[szamlalo2].getName() + "  --  " + fix1.getName() + "  --  " + fix2.getName());
+					if(szamlalo < emailcimek.size())
+		            {
+		            	szamlalo++;
+		            }
 					szamlalo2++;
 				} 
 	        }
 			else if(fix1 != null)
 			{
-				for(szamlalo = 0; szamlalo < emailcimek.size(); szamlalo++)
+				for(szamlalo = 1; szamlalo2 < mappa.length; szamlalo++)
 				{
 					model.addElement(emailcimek.get(szamlalo) + "  --  " + mappa[szamlalo2].getName() + "  --  " + fix1.getName());
+					if(szamlalo < emailcimek.size())
+		            {
+		            	szamlalo++;
+		            }
 					szamlalo2++;
 				}
 			}
 			else
 			{
-				for(szamlalo = 1; szamlalo < emailcimek.size(); szamlalo++)
+				for(szamlalo = 1; szamlalo2 < mappa.length; szamlalo++)
 				{
 					model.addElement(emailcimek.get(szamlalo) + "  --  " + mappa[szamlalo2].getName());
 					if(szamlalo < emailcimek.size())
@@ -445,6 +457,7 @@ public class Email
 		 {
 			if (e.getSource() == fix1csatol) 
 			{
+				fc3.setCurrentDirectory(new java.io.File("z:\\RoHS,Reach, CFSI\\"));
 				int returnVal = fc3.showOpenDialog(frame);													//fájl megniytásának adbalak megnyit
 				
 				if (returnVal == JFileChooser.APPROVE_OPTION) 
@@ -462,6 +475,7 @@ public class Email
 		 {
 			if (e.getSource() == fix2csatol) 
 			{
+				fc4.setCurrentDirectory(new java.io.File("z:\\RoHS,Reach, CFSI\\"));
 				int returnVal = fc4.showOpenDialog(frame);											//fájl megniytásának adbalak megnyit
 				
 				if (returnVal == JFileChooser.APPROVE_OPTION) 
