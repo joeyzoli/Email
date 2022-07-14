@@ -1,12 +1,18 @@
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -57,6 +63,7 @@ public class Email
 	private JTextArea level;
 	private JTextField targy;
 	private JTextField felado;
+	private JTextField cc;
 		
 
 	/**
@@ -101,7 +108,7 @@ public class Email
 		frame.setTitle("Csoportos email küldés");
 		
 		beolvas = new JButton("Cím lista");
-		beolvas.setBounds(106, 25, 89, 23);
+		beolvas.setBounds(106, 11, 89, 23);
 		beolvas.addActionListener(new Megnyitas());
 		frame.getContentPane().add(beolvas);
 		
@@ -116,7 +123,7 @@ public class Email
 		frame.getContentPane().add(csatol);
 		
 		level = new JTextArea();
-		level.setBounds(106, 146, 445, 231);
+		level.setBounds(10, 10, 445, 231);
 		frame.getContentPane().add(level);
 		
 		targy = new JTextField();
@@ -129,7 +136,7 @@ public class Email
 		frame.getContentPane().add(targymegnevezes);
 		
 		JLabel cimzettek = new JLabel("Címzettek");
-		cimzettek.setBounds(26, 29, 46, 14);
+		cimzettek.setBounds(26, 15, 46, 14);
 		frame.getContentPane().add(cimzettek);
 		
 		JLabel lblNewLabel = new JLabel("Levél tartalma:");
@@ -141,13 +148,13 @@ public class Email
 		frame.getContentPane().add(csatolmany);
 		
 		felado = new JTextField();
-		felado.setText("jenei.erika@veas.videoton.hu");
-		felado.setBounds(106, 74, 256, 20);
+		felado.setText("@veas.videoton.hu");
+		felado.setBounds(106, 45, 256, 20);
 		frame.getContentPane().add(felado);
 		felado.setColumns(10);
 		
 		JLabel felad = new JLabel("Feladó");
-		felad.setBounds(26, 77, 46, 14);
+		felad.setBounds(26, 48, 46, 14);
 		frame.getContentPane().add(felad);
 		
 		JScrollPane scrollPane = new JScrollPane(level);
@@ -169,6 +176,16 @@ public class Email
 		fix2csatol.addActionListener(new FixCsatolmany2());
 		frame.getContentPane().add(fix2csatol);
 		
+		JLabel masolat = new JLabel("CC");
+		masolat.setBounds(26, 81, 46, 14);
+		frame.getContentPane().add(masolat);
+		
+		cc = new JTextField();
+		cc.setText("@veas.videoton.hu");
+		cc.setBounds(106, 76, 256, 20);
+		frame.getContentPane().add(cc);
+		cc.setColumns(10);
+		
 		emailcimek = new ArrayList<String>();
 		
 		fc = new JFileChooser();
@@ -183,6 +200,8 @@ public class Email
 		{
 	
 			int szamlalo2 = 0;
+			
+			Logger logger = Logger.getAnonymousLogger();
 			
 			for(int szamlalo = 1; szamlalo < emailcimek.size(); szamlalo++)
 			{	
@@ -216,8 +235,8 @@ public class Email
 		            message.setFrom(new InternetAddress(felado.getText()));							//feladó beállítása
 		            message.setRecipients(Message.RecipientType.TO,
 		                InternetAddress.parse(emailcimek.get(szamlalo)));							//címzett beállítása
-		            /*message.setRecipients(Message.RecipientType.CC,
-			                InternetAddress.parse("jenei.erika@veas.videoton.hu"));							//címzett beállítása*/
+		            message.setRecipients(Message.RecipientType.CC,
+			                InternetAddress.parse(cc.getText()));							//címzett beállítása
 		            message.setSubject(targy.getText());											//tárgy beállítása
 		           
 		            Multipart multipart = new MimeMultipart();										//csatoló osztály példányosítása
@@ -273,26 +292,54 @@ public class Email
 		            System.out.println("Done");														//kiírja, ha lefutott minden rendben
 		        
 		        }
+		        catch (Exception e1) 
+		        {
+		        	String hibauzenet = e1.toString();
+		        	logger.log(Level.SEVERE, "an exception was thrown", e1);
+	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);
+	                FileWriter fstream;
+					try {
+						fstream = new FileWriter("c:\\Users\\jenei.erika\\Desktop\\hiba.txt");
+						BufferedWriter out=new BufferedWriter(fstream);
+		                out.write(e1.toString()+"\n");
+		                out.write(emailcimek.get(szamlalo) +"  "+  mappa[szamlalo2].getName());
+		                out.close();
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						String hibauzenet2 = e2.toString();
+						JOptionPane.showMessageDialog(null, hibauzenet2, "Hiba üzenet", 2);
+						e2.printStackTrace();
+					}
+	            
+	                break;
+		        }
+		        /*
 				catch (IOException e1) 																//Exception kivételek esetén történik
 	            {
 	                String hibauzenet = e1.toString();  											//hibaüzenet stringé alakítása
+	                
 	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);				//hibaüzenet kiiratása egy kis ablakba
+	                break;
 	            }
 		        catch (MessagingException e1) 
 		        {
-		        	String hibauzenet = e1.toString();  
+		        	String hibauzenet = e1.toString();
+		        	logger.log(Level.SEVERE, "an exception was thrown", e1);
 	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);
+	                break;
 		        }
 		        catch (NullPointerException e1) 
 	            {
 	                String hibauzenet = e1.toString();  
 	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);
+	                break;
 	            }
 		        catch (ArrayIndexOutOfBoundsException e1) 
 	            {
 	                String hibauzenet = e1.toString();  
 	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);
-	            }
+	                break;
+	            }*/
 			}			
 			JOptionPane.showMessageDialog(null, "Küldés kész", "Tájékoztató üzenet", 1);			
 		}		
@@ -365,10 +412,12 @@ public class Email
 					mappa = csatoltfile.listFiles();												//kilistázza és egy tömbnek adja a mappa elemeit
 				}				
 			}
+			/*
 			for(int szamlalo = 0; szamlalo < mappa.length; szamlalo++)
 			{
 				System.out.println(mappa[szamlalo]);
-			} 
+			}
+			*/ 
 		 }		
 	}
 	
@@ -441,7 +490,7 @@ public class Email
 				}
 			}
 		}
-		catch(ArrayIndexOutOfBoundsException e1) 																//Exception kivételek esetén történik
+		catch(Exception e1) 																//Exception kivételek esetén történik
         {
             String hibauzenet = e1.toString();  											//hibaüzenet stringé alakítása
             JOptionPane.showMessageDialog(null, hibauzenet, "Hiba üzenet", 2);				//hibaüzenet kiiratása egy kis ablakba
@@ -485,6 +534,9 @@ public class Email
 			}
 		 }		
 	}
-	
-	
+	private static class __Tmp {
+		private static void __tmp() {
+			  javax.swing.JPanel __wbp_panel = new javax.swing.JPanel();
+		}
+	}
 }
