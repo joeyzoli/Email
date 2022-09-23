@@ -313,33 +313,7 @@ public class Email
 	            
 	                break;
 		        }
-		        /*
-				catch (IOException e1) 																//Exception kivételek esetén történik
-	            {
-	                String hibauzenet = e1.toString();  											//hibaüzenet stringé alakítása
-	                
-	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);				//hibaüzenet kiiratása egy kis ablakba
-	                break;
-	            }
-		        catch (MessagingException e1) 
-		        {
-		        	String hibauzenet = e1.toString();
-		        	logger.log(Level.SEVERE, "an exception was thrown", e1);
-	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);
-	                break;
-		        }
-		        catch (NullPointerException e1) 
-	            {
-	                String hibauzenet = e1.toString();  
-	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);
-	                break;
-	            }
-		        catch (ArrayIndexOutOfBoundsException e1) 
-	            {
-	                String hibauzenet = e1.toString();  
-	                JOptionPane.showMessageDialog(null, emailcimek.get(szamlalo) + hibauzenet, "Hiba üzenet", 2);
-	                break;
-	            }*/
+		        
 			}			
 			JOptionPane.showMessageDialog(null, "Küldés kész", "Tájékoztató üzenet", 1);			
 		}		
@@ -378,20 +352,10 @@ public class Email
 					}
 				}
 			}
-			catch(IOException e1)
+			catch(Exception e1)
 			{
 				JOptionPane.showMessageDialog(null, "Olvasási hiba történt", "Hibaüzenet", 2);
-			}/*
-			for(int szamlalo = 3; szamlalo < emailcimek.size(); szamlalo++)
-			{
-				System.out.println(emailcimek.get(szamlalo));
-				szamlalo ++;
 			}
-			for(int szamlalo = 2; szamlalo < emailcimek.size(); szamlalo++)
-			{
-				System.out.println(emailcimek.get(szamlalo));
-				szamlalo ++;
-			}*/
 		 }		
 	}
 	
